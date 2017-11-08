@@ -1,0 +1,14 @@
+pip install PyMySQL
+pip install httplib2
+pip install django-formtools
+pip install django-crispy-forms
+pip install captcha
+pip install future
+pip install six
+pip install requests
+pip install djangorestframework
+pip install markdown
+pip install django-filter
+pip install celery
+pip install django-celery
+pip install redis

@@ -10,11 +10,31 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
-import os
+import os,sys
+import djcelery
+from celery import platforms
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
+sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
 
+''' celery config '''
+djcelery.setup_loader()
+BROKER_URL = 'redis://192.168.5.100:6379/3'
+CELERY_RESULT_BACKEND = 'djcelery.backends.database.DatabaseBackend'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_ACCEPT_CONTENT = ['json', 'pickle']
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERY_TASK_RESULT_EXPIRES = 60 * 60 * 24
+CELERYD_MAX_TASKS_PER_CHILD = 40
+CELERY_TRACK_STARTED = True
+CELERY_TIMEZONE='Asia/Shanghai'
+platforms.C_FORCE_ROOT = True
+
+REDSI_KWARGS_LPUSH = {"host":'192.168.5.100','port':6379,'db':3}
+REDSI_LPUSH_POOL = None
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -29,6 +49,9 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,7 +60,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'xadmin',
+    'crispy_forms',
+    'users',
+    'ops',
+    'rest_framework',
+    'djcelery',
 ]
+AUTH_USER_MODEL = "users.UserProfile"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -48,6 +78,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
 
 ROOT_URLCONF = 'hfops.urls'
 
@@ -76,8 +113,11 @@ WSGI_APPLICATION = 'hfops.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'hfops',
+        'USER': 'jacky',
+        'PASSWORD': '123456',
+        'HOST': '192.168.5.100',
     }
 }
 
@@ -104,18 +144,22 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
+
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,"static")
+]
