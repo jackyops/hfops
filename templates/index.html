@@ -172,16 +172,16 @@
                             <a href="#"><i class="glyphicon glyphicon-hdd"></i> 代码发布<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/deploy_add">项目配置</a>
+                                    <a href="{% url 'ops:deploy_add' %}">项目配置</a>
                                 </li>
                                 <li>
-                                    <a href="/deploy_list">项目列表</a>
+                                    <a href="{% url 'ops:deploy_list' %}">项目列表</a>
                                 </li>
                                 <li>
-                                    <a href="/deploy_order/">部署工单</a>
+                                    <a href="{% url 'ops:deploy_order' %}">部署工单</a>
                                 </li> 
 								<li>
-	                                <a href="/deploy_log">操作日志</a>
+	                                <a href="{% url 'ops:deploy_log' %}">操作日志</a>
 	                            </li>                                 
                             </ul>
                             <!-- /.nav-second-level -->

@@ -3,8 +3,9 @@ __author__ = 'Jacky'
 __date__ = '2017/11/1 22:30'
 
 from django.conf.urls import  url, include
-from ops.views import index,users,assets
+from ops.views import index,users,assets,deploy
 from restfull.assets_api import *
+
 
 urlpatterns = [
     url(r'^$', index.index,name="index"),
@@ -17,6 +18,22 @@ urlpatterns = [
     url(r'^assets_log/$',assets.assets_log,name="assets_log"),
     url(r'^assets_view/(?P<aid>[0-9]+)/$',assets.assets_view,name="assets_view"),
     url(r'^assets_facts',assets.assets_facts,name="assets_facts"),
+
+    #代码发布
+    url(r'^deploy_add', deploy.deploy_add,name='deploy_add'),
+    url(r'^deploy_list', deploy.deploy_list,name='deploy_list'),
+    url(r'^deploy_log', deploy.deploy_log,name='deploy_log'),
+    # url(r'^deploy_mod/(?P<pid>[0-9]+)/$', deploy.deploy_modf),
+    # url(r'^deploy_init/(?P<pid>[0-9]+)/$', deploy.deploy_init),
+    # url(r'^deploy_version/(?P<pid>[0-9]+)/$', deploy.deploy_version),
+    # url(r'^deploy_run/(?P<pid>[0-9]+)/$', deploy.deploy_run),
+    # url(r'^deploy_result/(?P<pid>[0-9]+)/$', deploy.deploy_result),
+    # url(r'^deploy_ask/(?P<pid>[0-9]+)/$', deploy.deploy_ask),
+    url(r'^deploy_order/$', deploy.deploy_order,name='deploy_order'),
+    # url(r'^deploy_order/status/(?P<pid>[0-9]+)/$', deploy.deploy_order_status),
+    # url(r'^deploy_order/rollback/(?P<pid>[0-9]+)/$', deploy.deploy_order_rollback),
+    # url(r'^deploy_manage/(?P<pid>[0-9]+)/$', deploy.deploy_manage),
+
 
     url(r'^api/service/$',service_list,name="service_list"),
     url(r'^api/service/(?P<id>[0-9]+)/$', service_detail,name="service_detail"),

@@ -1,3 +1,4 @@
+pip install django
 pip install PyMySQL
 pip install httplib2
 pip install django-formtools
@@ -12,3 +13,5 @@ pip install django-filter
 pip install celery
 pip install django-celery
 pip install redis
+pip install ansible=2.2
+pip install Pillow
